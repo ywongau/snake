@@ -21,31 +21,31 @@ const getEffectiveDirection = (previousDirection, direction) =>
   isOppositeDirection(previousDirection, direction)
     ? previousDirection
     : direction;
+
 const headHitsBody = (newHead, newBody) =>
   newBody.some(point => point[0] === newHead[0] && point[1] === newHead[1]);
 
-const isDeadSnake = (head, body) =>
+const headHitsWall = head =>
   head[0] === -1 ||
   head[1] === -1 ||
-  head[0] === 32 ||
-  head[1] === 24 ||
-  headHitsBody(head, body);
+  head[0] === width + 1 ||
+  head[1] === height + 1;
+
+const isFoodEaten = (head, food) => head[0] === food[0] && head[1] === food[1];
 
 const move = state => {
   const effectiveDirection = getEffectiveDirection(
     state.previousDirection,
     state.direction
   );
-
   const newHead = nextMoveMapper[effectiveDirection](state.snake[0]);
-  const isFoodEaten = nextHead =>
-    nextHead[0] === state.food[0] && nextHead[1] === state.food[1];
-  const newBody = isFoodEaten(newHead) ? state.snake : state.snake.slice(0, -1);
-  const nextSnake = [newHead, ...newBody];
+  const newBody = isFoodEaten(newHead, state.food)
+    ? state.snake
+    : state.snake.slice(0, -1);
   return {
     ...state,
-    snake: (state.snake = nextSnake),
-    isAlive: !isDeadSnake(newHead, newBody)
+    snake: (state.snake = [newHead, ...newBody]),
+    isAlive: !headHitsWall(newHead) && !headHitsBody(newHead, newBody)
   };
 };
 
