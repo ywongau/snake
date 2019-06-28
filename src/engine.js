@@ -1,10 +1,10 @@
 import directions from "./directions";
-const width = 96;
-const height = 68;
+const width = 31;
+const height = 23;
 //Point:: [Number, Number]
 //state:: {snake: Array Point, food: Point, isAlive: Boolean, previousDirection: Number, direction: Number}
 const init = () => ({
-  snake: [[width / 2, height / 2]]
+  snake: [[Math.ceil(width / 2), Math.ceil(height / 2)]]
 });
 
 const nextMoveMapper = {
@@ -21,15 +21,31 @@ const getEffectiveDirection = (previousDirection, direction) =>
   isOppositeDirection(previousDirection, direction)
     ? previousDirection
     : direction;
+const headHitsBody = (newHead, newBody) =>
+  newBody.some(point => point[0] === newHead[0] && point[1] === newHead[1]);
+
+const isDeadSnake = (head, body) =>
+  head[0] === -1 ||
+  head[1] === -1 ||
+  head[0] === 32 ||
+  head[1] === 24 ||
+  headHitsBody(head, body);
 
 const move = state => {
   const effectiveDirection = getEffectiveDirection(
     state.previousDirection,
     state.direction
   );
-  const mapper = nextMoveMapper[effectiveDirection];
+
+  const newHead = nextMoveMapper[effectiveDirection](state.snake[0]);
+  const isFoodEaten = nextHead =>
+    nextHead[0] === state.food[0] && nextHead[1] === state.food[1];
+  const newBody = isFoodEaten(newHead) ? state.snake : state.snake.slice(0, -1);
+  const nextSnake = [newHead, ...newBody];
   return {
-    snake: state.snake.map(mapper)
+    ...state,
+    snake: (state.snake = nextSnake),
+    isAlive: !isDeadSnake(newHead, newBody)
   };
 };
 
