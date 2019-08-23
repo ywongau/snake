@@ -1,18 +1,39 @@
-import engine from "./engine";
+import Engine from "./engine";
 import directions from "./directions";
+import { iif } from "rxjs";
+const defaultRandom = () => 0;
+const foodDispenser = () => [2, 2];
+const engine = Engine(foodDispenser);
 it("initializes", () => {
   const result = engine({
     snake: [],
-    direction: directions.up,
-    food: [0, 0]
+    keyedDirection: directions.up
   });
   expect(result.snake).toEqual([[16, 12]]);
+  expect(result.isAlive).toEqual(true);
+});
+
+it("initialize calls foodDispenser with correct params", () => {
+  const dispenserSpy = jest.fn();
+  const result = Engine(dispenserSpy)({
+    snake: [],
+    keyedDirection: directions.up
+  });
+  expect(dispenserSpy).toHaveBeenCalledWith(31, 23, result.snake);
+});
+
+it("drops food at random location at 0,0", () => {
+  const result = Engine(() => [1, 1])({
+    snake: [],
+    keyedDirection: directions.up
+  });
+  expect(result.food).toEqual([1, 1]);
 });
 
 it("move up into wall", function() {
   const result = engine({
     snake: [[0, 0]],
-    direction: directions.up,
+    keyedDirection: directions.up,
     food: [0, 0],
     isAlive: true
   });
@@ -22,7 +43,7 @@ it("move up into wall", function() {
 it("move left into wall", function() {
   const result = engine({
     snake: [[0, 0]],
-    direction: directions.left,
+    keyedDirection: directions.left,
     food: [0, 0],
     isAlive: true
   });
@@ -32,7 +53,7 @@ it("move left into wall", function() {
 it("move right into wall", function() {
   const result = engine({
     snake: [[31, 23]],
-    direction: directions.right,
+    keyedDirection: directions.right,
     food: [0, 0],
     isAlive: true
   });
@@ -42,7 +63,7 @@ it("move right into wall", function() {
 it("move down into wall", function() {
   const result = engine({
     snake: [[31, 23]],
-    direction: directions.down,
+    keyedDirection: directions.down,
     food: [0, 0],
     isAlive: true
   });
@@ -52,7 +73,7 @@ it("move down into wall", function() {
 it("moves up", function() {
   const result = engine({
     snake: [[10, 10], [11, 10], [12, 10]],
-    direction: directions.up,
+    keyedDirection: directions.up,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[10, 9], [10, 10], [11, 10]]);
@@ -62,17 +83,46 @@ it("moves up", function() {
 it("moves up and eat", function() {
   const result = engine({
     snake: [[10, 10], [11, 10], [12, 10]],
-    direction: directions.up,
+    keyedDirection: directions.up,
     food: [10, 9]
   });
   expect(result.snake).toEqual([[10, 9], [10, 10], [11, 10], [12, 10]]);
   expect(result.isAlive).toEqual(true);
 });
 
+it("moves up, no eat! food stay", function() {
+  const result = engine({
+    snake: [[10, 10], [11, 10], [12, 10]],
+    keyedDirection: directions.up,
+    food: [1, 1]
+  });
+  expect(result.food).toEqual([1, 1]);
+});
+
+it("adds new food after eating", function() {
+  const result = Engine(() => [2, 2])({
+    snake: [[10, 10], [11, 10], [12, 10]],
+    keyedDirection: directions.up,
+    food: [10, 9]
+  });
+  expect(result.food).toEqual([2, 2]);
+});
+
+it("calls food dispenser valid params", function() {
+  const dispenserSpy = jest.fn();
+  const snakePos = [[10, 10], [11, 10], [12, 10]];
+  const result = Engine(dispenserSpy)({
+    snake: snakePos,
+    keyedDirection: directions.up,
+    food: [10, 9]
+  });
+  expect(dispenserSpy).toHaveBeenCalledWith(31, 23, result.snake);
+});
+
 it("moves down", function() {
   const result = engine({
     snake: [[10, 10]],
-    direction: directions.down,
+    keyedDirection: directions.down,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[10, 11]]);
@@ -82,7 +132,7 @@ it("moves down", function() {
 it("moves left", function() {
   const result = engine({
     snake: [[10, 10]],
-    direction: directions.left,
+    keyedDirection: directions.left,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[9, 10]]);
@@ -92,7 +142,7 @@ it("moves left", function() {
 it("moves right", function() {
   const result = engine({
     snake: [[10, 10]],
-    direction: directions.right,
+    keyedDirection: directions.right,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[11, 10]]);
@@ -102,8 +152,8 @@ it("moves right", function() {
 it("moves down then up", function() {
   const result = engine({
     snake: [[10, 10]],
-    previousDirection: directions.down,
-    direction: directions.up,
+    movingDirection: directions.down,
+    keyedDirection: directions.up,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[10, 11]]);
@@ -112,8 +162,8 @@ it("moves down then up", function() {
 it("moves up then down", function() {
   const result = engine({
     snake: [[10, 10]],
-    previousDirection: directions.up,
-    direction: directions.down,
+    movingDirection: directions.up,
+    keyedDirection: directions.down,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[10, 9]]);
@@ -122,8 +172,8 @@ it("moves up then down", function() {
 it("moves left then right", function() {
   const result = engine({
     snake: [[10, 10]],
-    previousDirection: directions.left,
-    direction: directions.right,
+    movingDirection: directions.left,
+    keyedDirection: directions.right,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[9, 10]]);
@@ -132,8 +182,8 @@ it("moves left then right", function() {
 it("moves right then left", function() {
   const result = engine({
     snake: [[10, 10]],
-    previousDirection: directions.right,
-    direction: directions.left,
+    movingDirection: directions.right,
+    keyedDirection: directions.left,
     food: [0, 0]
   });
   expect(result.snake).toEqual([[11, 10]]);
@@ -143,8 +193,8 @@ it("moves right then left", function() {
 it("moves onto itself and dies", function() {
   const result = engine({
     snake: [[11, 9], [10, 9], [10, 10], [11, 10], [12, 10]],
-    previousDirection: directions.right,
-    direction: directions.down,
+    movingDirection: directions.right,
+    keyedDirection: directions.down,
     food: [0, 0]
   });
   expect(result.isAlive).toEqual(false);
