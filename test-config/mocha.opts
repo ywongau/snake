@@ -1,0 +1,3 @@
+app/**/*.test.{ts,js}
+-r test-config/register.js
+--recursive
