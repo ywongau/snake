@@ -1,11 +1,6 @@
 import { expect } from "chai";
 
-import {
-  ap,
-  dropFood,
-  range,
-  getIndexOfArrayCorrespondingToChance
-} from "./utils";
+import { ap, dropFood, range } from "./utils";
 
 describe("util", () => {
   it("should apply", () => {
@@ -25,6 +20,7 @@ describe("util", () => {
     const randomNumber = () => 0;
     expect(dropFood(randomNumber)(width, height, [])).to.deep.equal([0, 0]);
   });
+
   it("should drop food at last location when random number is 0.999999", () => {
     const width = 10;
     const height = 10;
@@ -44,9 +40,5 @@ describe("util", () => {
 
   it("should generate array", () => {
     expect(range(2)).to.deep.equal([0, 1]);
-  });
-
-  it("should get index of array based on random value", () => {
-    expect(getIndexOfArrayCorrespondingToChance(10, 0.51)).to.deep.equal(5);
   });
 });

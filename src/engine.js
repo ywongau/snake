@@ -38,10 +38,10 @@ const headHitsWall = head =>
 
 const isFoodEaten = (head, food) => head[0] === food[0] && head[1] === food[1];
 
-const move = (foodDispenser, state) => {
+const move = (foodDispenser, state, keyedDirection) => {
   const effectiveDirection = getEffectiveDirection(
     state.movingDirection,
-    state.keyedDirection
+    keyedDirection
   );
   const nextHead = nextHeadMapper[effectiveDirection](state.snake[0]);
   const foodEaten = isFoodEaten(nextHead, state.food);
@@ -55,7 +55,7 @@ const move = (foodDispenser, state) => {
   };
 };
 
-const next = foodDispenser => state =>
-  state.snake.length === 0 ? init(foodDispenser) : move(foodDispenser, state);
+const next = foodDispenser => (state, keyedDirection) =>
+  state.snake.length === 0 ? init(foodDispenser) : move(foodDispenser, state, keyedDirection);
 
 export default next;
