@@ -1,33 +1,36 @@
-.App {
+body {
+  font-size: 20px;
+}
+
+.board {
+  background: #a09d1c;
+  margin: 20px auto;
+  position: relative;
   text-align: center;
+  vertical-align: middle
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+button {
+  font-size: 2em;
+  padding: 1em;
+  position: relative;
+  top: calc(50% - 2em);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.snake, .food {
+  position: absolute;
+  box-sizing: border-box;
+  border: solid 1px #a09d1c;
+}
+
+.snake {
+  background: #333;
+}
+
+.food {
+  background: #666;
 }
 
 .App-link {
   color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

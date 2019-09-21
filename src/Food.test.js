@@ -10,5 +10,7 @@ it("renders a food", () => {
   expect(divs.length).to.equal(1);
   expect(divs.get(0).props.style.left).to.equal("1em");
   expect(divs.get(0).props.style.top).to.equal("1em");
+  expect(divs.get(0).props.style.width).to.equal("1em");
+  expect(divs.get(0).props.style.height).to.equal("1em");
   expect(divs.get(0).props.className).to.equal("food");
 });
