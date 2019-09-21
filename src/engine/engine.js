@@ -54,9 +54,9 @@ const move = (foodDispenser, state, keyedDirection) => {
   return {
     ...state,
     snake: isAlive ? nextSnake : state.snake,
-    isAlive,
     food: foodEaten ? foodDispenser(nextSnake) : state.food,
-    movingDirection: movingDirection
+    isAlive,
+    movingDirection
   };
 };
 
