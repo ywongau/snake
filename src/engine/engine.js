@@ -26,8 +26,8 @@ const Engine = (foodDispenser, width, height) => {
       ? movingDirection
       : keyedDirection;
 
-  const headHitsBody = (newHead, newBody) =>
-    newBody.some((point) => point[0] === newHead[0] && point[1] === newHead[1]);
+  const headHitsBody = (head, body) =>
+    body.some((point) => point[0] === head[0] && point[1] === head[1]);
 
   const headHitsWall = (head) =>
     head[0] === -1 ||
