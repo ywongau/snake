@@ -27,7 +27,7 @@ it('drops food', () => {
   expect(result.food).to.deep.equal([1, 1]);
 });
 
-it('move up into wall', function() {
+it('move up into wall', () => {
   const result = engine.next(
     {
       snake: [[0, 0]],
@@ -40,7 +40,7 @@ it('move up into wall', function() {
   expect(result.isAlive).to.deep.equal(false);
 });
 
-it('move left into wall', function() {
+it('move left into wall', () => {
   const result = engine.next(
     {
       snake: [[0, 0]],
@@ -52,7 +52,7 @@ it('move left into wall', function() {
   expect(result.isAlive).to.deep.equal(false);
 });
 
-it('move right into wall', function() {
+it('move right into wall', () => {
   const result = engine.next(
     {
       snake: [[31, 23]],
@@ -64,7 +64,7 @@ it('move right into wall', function() {
   expect(result.isAlive).to.deep.equal(false);
 });
 
-it('move down into wall', function() {
+it('move down into wall', () => {
   const result = engine.next(
     {
       snake: [[31, 23]],
@@ -76,7 +76,7 @@ it('move down into wall', function() {
   expect(result.isAlive).to.deep.equal(false);
 });
 
-it('should keep snake in the old position if snake is dead', function() {
+it('should keep snake in the old position if snake is dead', () => {
   const result = engine.next(
     {
       snake: [[0, 0]],
@@ -88,7 +88,7 @@ it('should keep snake in the old position if snake is dead', function() {
   expect(result.snake).to.deep.equal([[0, 0]]);
 });
 
-it('moves up', function() {
+it('moves up', () => {
   const result = engine.next(
     {
       snake: [
@@ -108,7 +108,7 @@ it('moves up', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 
-it('moves up and eat', function() {
+it('moves up and eat', () => {
   const result = engine.next(
     {
       snake: [
@@ -129,7 +129,7 @@ it('moves up and eat', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 
-it('moves up, no eat! food stay', function() {
+it('moves up, no eat! food stay', () => {
   const result = engine.next(
     {
       //don't care about food, use default set up
@@ -145,7 +145,7 @@ it('moves up, no eat! food stay', function() {
   expect(result.food).to.deep.equal([1, 1]);
 });
 
-it('adds new food after eating', function() {
+it('adds new food after eating', () => {
   const result = Engine(() => [2, 2]).next(
     {
       //food is dropped at [2, 2]
@@ -161,7 +161,7 @@ it('adds new food after eating', function() {
   expect(result.food).to.deep.equal([2, 2]);
 });
 
-it('calls food dispenser valid params', function() {
+it('calls food dispenser with valid params', () => {
   const dispenserSpy = sinon.spy(); //only care about params passed to foodDispenser
   const result = Engine(dispenserSpy).next(
     {
@@ -177,7 +177,7 @@ it('calls food dispenser valid params', function() {
   assert.calledWith(dispenserSpy, result.snake);
 });
 
-it('moves down', function() {
+it('moves down', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -189,7 +189,7 @@ it('moves down', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 
-it('moves left', function() {
+it('moves left', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -201,7 +201,7 @@ it('moves left', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 
-it('moves right', function() {
+it('moves right', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -213,7 +213,7 @@ it('moves right', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 
-it('moves down then up', function() {
+it('moves down then up', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -225,7 +225,8 @@ it('moves down then up', function() {
   expect(result.snake).to.deep.equal([[10, 11]]);
   expect(result.isAlive).to.deep.equal(true);
 });
-it('moves up then down', function() {
+
+it('moves up then down', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -237,7 +238,8 @@ it('moves up then down', function() {
   expect(result.snake).to.deep.equal([[10, 9]]);
   expect(result.isAlive).to.deep.equal(true);
 });
-it('moves left then right', function() {
+
+it('moves left then right', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -249,7 +251,8 @@ it('moves left then right', function() {
   expect(result.snake).to.deep.equal([[9, 10]]);
   expect(result.isAlive).to.deep.equal(true);
 });
-it('moves right then left', function() {
+
+it('moves right then left', () => {
   const result = engine.next(
     {
       snake: [[10, 10]],
@@ -262,7 +265,7 @@ it('moves right then left', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 
-it('moves onto itself and dies', function() {
+it('moves onto itself and dies', () => {
   const result = engine.next(
     {
       snake: [
