@@ -1,8 +1,6 @@
-import { height, width } from "./settings";
+import directions from './directions';
 
-import directions from "./directions";
-
-const init = foodDispenser => {
+const init = (foodDispenser, width, height) => {
   const snake = [[Math.floor(width / 2), Math.floor(height / 2)]];
   return {
     snake: snake,
@@ -28,9 +26,9 @@ const getMovingDirection = (movingDirection, keyedDirection) =>
     : keyedDirection;
 
 const headHitsBody = (newHead, newBody) =>
-  newBody.some(point => point[0] === newHead[0] && point[1] === newHead[1]);
+  newBody.some((point) => point[0] === newHead[0] && point[1] === newHead[1]);
 
-const headHitsWall = head =>
+const headHitsWall = (head, width, height) =>
   head[0] === -1 ||
   head[1] === -1 ||
   head[0] === width + 1 ||
@@ -38,7 +36,7 @@ const headHitsWall = head =>
 
 const isFoodEaten = (head, food) => head[0] === food[0] && head[1] === food[1];
 
-const move = (foodDispenser, state, keyedDirection) => {
+const move = (foodDispenser, width, height, state, keyedDirection) => {
   const movingDirection = getMovingDirection(
     state.movingDirection,
     keyedDirection
@@ -51,7 +49,8 @@ const move = (foodDispenser, state, keyedDirection) => {
   const foodEaten = isFoodEaten(nextHead, state.food);
   const nextBody = foodEaten ? state.snake : state.snake.slice(0, -1);
   const nextSnake = [nextHead, ...nextBody];
-  const isAlive = !headHitsWall(nextHead) && !headHitsBody(nextHead, nextBody);
+  const isAlive =
+    !headHitsWall(nextHead, width, height) && !headHitsBody(nextHead, nextBody);
   return {
     ...state,
     snake: isAlive ? nextSnake : state.snake,
@@ -61,9 +60,9 @@ const move = (foodDispenser, state, keyedDirection) => {
   };
 };
 
-const next = foodDispenser => (state, keyedDirection) =>
+const next = (foodDispenser, width, height) => (state, keyedDirection) =>
   state === undefined
-    ? init(foodDispenser)
-    : move(foodDispenser, state, keyedDirection);
+    ? init(foodDispenser, width, height)
+    : move(foodDispenser, width, height, state, keyedDirection);
 
 export default next;

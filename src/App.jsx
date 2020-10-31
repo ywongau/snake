@@ -1,15 +1,20 @@
-import React from "react";
-import Board from "./Board";
-import Hooks from "./Hooks";
-import Engine from "./engine/engine";
-import "./App.css";
-import foodDispensor from "./engine/food-dispenser";
-import { width, height, interval } from "./engine/settings";
+import './App.css';
+
+import { height, interval, width } from './engine/settings';
+
+import Board from './Board';
+import Engine from './engine/engine';
+import FoodDispensor from './engine/food-dispenser';
+import Hooks from './Hooks';
+import React from 'react';
+
+const foodDispensor = FoodDispensor(Math.random, width, height);
+const engine = Engine(foodDispensor, width, height);
 
 export default () => {
   const [state, start] = Hooks(
-    Engine(foodDispensor(Math.random, width, height)),
-    f => setInterval(f, interval),
+    engine,
+    (f) => setInterval(f, interval),
     clearInterval
   )();
 
@@ -17,8 +22,8 @@ export default () => {
     <div
       className="board"
       style={{
-        width: width + 1 + "em",
-        height: height + 1 + "em"
+        width: width + 1 + 'em',
+        height: height + 1 + 'em'
       }}
     >
       {state.game ? (
