@@ -1,5 +1,15 @@
-body {
+body, html {
   font-size: 20px;
+  font-size: 3vmin;
+  height: 100%;
+}
+
+body {
+  display: flex;
+}
+
+#root {
+  margin: auto;
 }
 
 .board {
