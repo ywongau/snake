@@ -1,9 +1,10 @@
-import React from "react";
+import { mount, shallow } from "enzyme";
+
 import Food from "./Food";
-import { shallow, mount } from "enzyme";
+import React from "react";
 import { expect } from "chai";
 
-it("renders a food", () => {
+it("renders food", () => {
   const food = [1, 1];
   const wrapper = mount(<Food food={food} />);
   const divs = wrapper.find("div");

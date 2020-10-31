@@ -1,7 +1,0 @@
-src/**/*.test.{jsx,js}
--r test-config/register.js
--r test-config/setup.js
---watch
---watch-extensions jsx
---watch-extensions js
---recursive
