@@ -1,5 +1,6 @@
+import { height, width } from "./settings";
+
 import directions from "./directions";
-import { width, height } from "./settings";
 
 const init = foodDispenser => {
   const snake = [[Math.floor(width / 2), Math.floor(height / 2)]];
@@ -42,10 +43,10 @@ const move = (foodDispenser, state, keyedDirection) => {
     state.movingDirection,
     keyedDirection
   );
-  const nextMove = nextMoveMapping[movingDirection];
+  const offset = nextMoveMapping[movingDirection];
   const nextHead = [
-    state.snake[0][0] + nextMove[0],
-    state.snake[0][1] + nextMove[1]
+    state.snake[0][0] + offset[0],
+    state.snake[0][1] + offset[1]
   ];
   const foodEaten = isFoodEaten(nextHead, state.food);
   const nextBody = foodEaten ? state.snake : state.snake.slice(0, -1);
