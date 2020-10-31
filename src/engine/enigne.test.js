@@ -8,7 +8,7 @@ import { expect } from 'chai';
 const foodDispenser = () => [2, 2];
 const engine = Engine(foodDispenser, width, height);
 it('initializes', () => {
-  const result = engine();
+  const result = engine.init();
   expect(result.snake).to.deep.equal([
     [Math.floor(width / 2), Math.floor(height / 2)]
   ]);
@@ -18,17 +18,17 @@ it('initializes', () => {
 
 it('initialize calls foodDispenser with correct params', () => {
   const dispenserSpy = sinon.spy();
-  const result = Engine(dispenserSpy)();
+  const result = Engine(dispenserSpy).init();
   assert.calledWith(dispenserSpy, result.snake);
 });
 
 it('drops food', () => {
-  const result = Engine(() => [1, 1])();
+  const result = Engine(() => [1, 1]).init();
   expect(result.food).to.deep.equal([1, 1]);
 });
 
 it('move up into wall', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[0, 0]],
       food: [0, 0],
@@ -41,7 +41,7 @@ it('move up into wall', function() {
 });
 
 it('move left into wall', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[0, 0]],
       food: [0, 0],
@@ -53,7 +53,7 @@ it('move left into wall', function() {
 });
 
 it('move right into wall', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[31, 23]],
       food: [0, 0],
@@ -65,7 +65,7 @@ it('move right into wall', function() {
 });
 
 it('move down into wall', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[31, 23]],
       food: [0, 0],
@@ -77,7 +77,7 @@ it('move down into wall', function() {
 });
 
 it('should keep snake in the old position if snake is dead', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[0, 0]],
       food: [0, 0],
@@ -89,7 +89,7 @@ it('should keep snake in the old position if snake is dead', function() {
 });
 
 it('moves up', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [
         [10, 10],
@@ -109,7 +109,7 @@ it('moves up', function() {
 });
 
 it('moves up and eat', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [
         [10, 10],
@@ -130,7 +130,7 @@ it('moves up and eat', function() {
 });
 
 it('moves up, no eat! food stay', function() {
-  const result = engine(
+  const result = engine.next(
     {
       //don't care about food, use default set up
       snake: [
@@ -146,7 +146,7 @@ it('moves up, no eat! food stay', function() {
 });
 
 it('adds new food after eating', function() {
-  const result = Engine(() => [2, 2])(
+  const result = Engine(() => [2, 2]).next(
     {
       //food is dropped at [2, 2]
       snake: [
@@ -163,7 +163,7 @@ it('adds new food after eating', function() {
 
 it('calls food dispenser valid params', function() {
   const dispenserSpy = sinon.spy(); //only care about params passed to foodDispenser
-  const result = Engine(dispenserSpy)(
+  const result = Engine(dispenserSpy).next(
     {
       snake: [
         [10, 10],
@@ -178,7 +178,7 @@ it('calls food dispenser valid params', function() {
 });
 
 it('moves down', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       food: [0, 0]
@@ -190,7 +190,7 @@ it('moves down', function() {
 });
 
 it('moves left', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       food: [0, 0]
@@ -202,7 +202,7 @@ it('moves left', function() {
 });
 
 it('moves right', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       food: [0, 0]
@@ -214,7 +214,7 @@ it('moves right', function() {
 });
 
 it('moves down then up', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       movingDirection: directions.down,
@@ -226,7 +226,7 @@ it('moves down then up', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 it('moves up then down', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       movingDirection: directions.up,
@@ -238,7 +238,7 @@ it('moves up then down', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 it('moves left then right', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       movingDirection: directions.left,
@@ -250,7 +250,7 @@ it('moves left then right', function() {
   expect(result.isAlive).to.deep.equal(true);
 });
 it('moves right then left', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [[10, 10]],
       movingDirection: directions.right,
@@ -263,7 +263,7 @@ it('moves right then left', function() {
 });
 
 it('moves onto itself and dies', function() {
-  const result = engine(
+  const result = engine.next(
     {
       snake: [
         [11, 9],

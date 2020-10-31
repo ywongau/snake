@@ -1,11 +1,11 @@
-import { useReducer } from "react";
 import directions from "./engine/directions";
+import { useReducer } from "react";
 
 const NEXT = "next";
 const INIT = "init";
 const DIRECTION = "direction";
 
-const Reducer = next => (state, action) => {
+const Reducer = ({next, init}) => (state, action) => {
   switch (action.type) {
     case NEXT:
       return {
@@ -20,7 +20,7 @@ const Reducer = next => (state, action) => {
     case INIT:
       return {
         ...state,
-        game: next(),
+        game: init(),
         timer: action.payload
       };
     default:
