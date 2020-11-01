@@ -1,10 +1,12 @@
 import directions from './directions';
 
+const { up, down, left, right } = directions;
+
 const nextMoveMapping = {
-  [directions.up]: [0, -1],
-  [directions.down]: [0, 1],
-  [directions.left]: [-1, 0],
-  [directions.right]: [1, 0]
+  [up]: [0, -1],
+  [down]: [0, 1],
+  [left]: [-1, 0],
+  [right]: [1, 0]
 };
 
 const isOppositeDirection = (keycodeA, keycodeB) =>
@@ -32,7 +34,7 @@ const init = (foodDispenser, width, height) => () => {
     snake: snake,
     isAlive: true,
     food: foodDispenser(snake),
-    movingDirection: directions.up
+    movingDirection: up
   };
 };
 
