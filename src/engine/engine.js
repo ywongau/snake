@@ -44,19 +44,18 @@ const next = (foodDispenser, width, height) => (state, keyedDirection) => {
     keyedDirection
   );
   const offset = nextMoveMapping[movingDirection];
-  const nextHead = [
+  const head = [
     state.snake[0][0] + offset[0],
     state.snake[0][1] + offset[1]
   ];
-  const foodEaten = isFoodEaten(nextHead, state.food);
-  const nextBody = foodEaten ? state.snake : state.snake.slice(0, -1);
-  const nextSnake = [nextHead, ...nextBody];
+  const foodEaten = isFoodEaten(head, state.food);
+  const body = foodEaten ? state.snake : state.snake.slice(0, -1);
+  const snake = [head, ...body];
   const isAlive =
-    !headHitsWall(nextHead, width, height) && !headHitsBody(nextHead, nextBody);
+    !headHitsWall(head, width, height) && !headHitsBody(head, body);
   return {
-    ...state,
-    snake: isAlive ? nextSnake : state.snake,
-    food: foodEaten ? foodDispenser(nextSnake) : state.food,
+    snake: isAlive ? snake : state.snake,
+    food: foodEaten ? foodDispenser(snake) : state.food,
     isAlive,
     movingDirection
   };
