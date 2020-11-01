@@ -1,5 +1,5 @@
-const pointNotIn = (xs) => (y) =>
-  !xs.some((x) => x[0] === y[0] && x[1] === y[1]);
+const pointNotIn = (points) => (point) =>
+  !points.some((x) => x[0] === point[0] && x[1] === point[1]);
 
 const getRandomPoint = (random0to1, allPoints) =>
   allPoints[Math.floor(allPoints.length * random0to1)];
